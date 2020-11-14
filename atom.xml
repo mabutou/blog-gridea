@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://blog.butou.ma</id>
+    <title>Gridea</title>
+    <updated>2020-11-14T05:16:22.637Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://blog.butou.ma"/>
+    <link rel="self" href="https://blog.butou.ma/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://blog.butou.ma/images/avatar.png</logo>
+    <icon>https://blog.butou.ma/favicon.ico</icon>
+    <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[碎片化信息流的聚合与输出 Rsshub + Reeder + Notion]]></title>
+        <id>https://blog.butou.ma/post/sui-pian-hua-xin-xi-liu-de-ju-he-yu-shu-chu-rsshub-reeder-notion/</id>
+        <link href="https://blog.butou.ma/post/sui-pian-hua-xin-xi-liu-de-ju-he-yu-shu-chu-rsshub-reeder-notion/">
+        </link>
+        <updated>2020-11-14T05:14:57.000Z</updated>
+        <content type="html"><![CDATA[<p><em><strong>19.10.05 update:</strong></em></p>
+<p>1. 之前在服务器端部署的 <em>ttrss</em> 用一段时间后感觉太臃肿，已更换为轻量级的 <strong><em>Miniflux</em></strong>，直接用 <em>Docker</em> 部署在 <em>nas</em> 上的。支持 <strong><em>Reeder</em></strong> ，安装过程也更简单。</p>
+<p><a href="https://github.com/miniflux/miniflux"><em>https://github.com/miniflux/miniflux</em></a></p>
+<p>2. 迫于 <strong><em>Typora</em></strong> 一直没有 <em>iOS</em> 端，笔记应用迁移到 <em><strong>Notion</strong></em> ，目前有教育优惠，用教育版邮箱注册直接免费。</p>
+<p>3. <strong><em>Typora</em></strong> 里 md 文件有点多。迁移到 <em><strong>Notion</strong></em> 时，直接导入会造成 md 文件内引用的本地图片丢失。所以先用命令行工具 <strong><em>pandoc</em></strong> 批量转换为 docx 格式文件。再导入 <em><strong>Notion</strong></em>。<strong><em>pandoc</em></strong> 转换文档时可以指定 css 文件进行样式渲染。</p>
+<p>4. 由于 md 文件散布在不同文件夹，写了个 bash 脚本进行批量汇总及转换。</p>
+<p>汇总脚本详情见博文：<em><a href="https://butou.ma/2019/09/18/macos-%E5%B0%8F%E8%84%9A%E6%9C%AC-%E6%89%B9%E9%87%8F%E5%A4%8D%E5%88%B6%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%89%B9%E5%AE%9A%E7%B1%BB%E5%9E%8B%E6%96%87%E4%BB%B6">https://butou.ma/2019/09/18/macos - 小脚本 - 批量复制指定目录下特定类型文件</a></em></p>
+<p>汇总 + 转换 + 保留文件夹层级功能脚本点此下载：<a href="https://butou.ma/pandoc.sh"><em>pandoc.sh</em></a></p>
+<p><img src="https://butou.ma/wp-content/uploads/2019/02/Screen-Shot-2019-10-05-at-18.23.05-1024x739.png" alt="" loading="lazy">Notion 界面简洁，功能也挺强</p>
+<p><em>19.08.14 update:</em></p>
+<p>1. 文内提到的 RSSHub 的开发者已开发了对应的 Chrome 扩展，可以直接检测页面是否支持 RSS，并一键订阅到阅读器。<a href="https://github.com/DIYgod/RSSHub-Radar">https://github.com/DIYgod/RSSHub-Radar</a></p>
+<p>2. RSS 阅读器 Inoreader 转为付费的 Reeder 4。并链接到服务器端部署的 ttrss（开源的，支持过滤器）。</p>
+<p>3. 笔记应用 Trilium 已放弃，转移到 Mac 端的 Typora，配合 Google Drive 进行 markdown 文件和图片文件同步。</p>
+<figure data-type="image" tabindex="1"><img src="https://butou.ma/wp-content/uploads/2019/02/Screen-Shot-2019-08-14-at-19.51.19.png?is-pending-load=1" alt="" loading="lazy"></figure>
+<h2 id="正文">正文：</h2>
+<p><em><strong>“世间好物不坚牢 彩云易散琉璃碎”</strong></em></p>
+<p>美好的事物不能永恒存在，自然状态下世间万物总是会从有序到无序，为何如此?</p>
+<p>根据热力学第二定律，封闭系统最终都会趋向混乱度最大的状态，除非外部注入能量。</p>
+<p>也就是说如果没有外力介入，<strong>事物永远向着更混乱的状态发展</strong>。</p>
+<p>衡量混乱程度的指标叫熵。一种悲观假设是当熵的量增加到极限，宇宙会进入热寂，到达虚无。</p>
+<p>为了让一个系统保持有序，我们必须付出额外代价。注入外部能量来抵抗熵的增加。</p>
+<p>互联网让获取信息的渠道爆发性增长，其中伴随着大量噪音信息。如果不进行筛选和取舍，信噪比会逐步降低。最终吸收的大部份都是垃圾。</p>
+<p>身处比特洪流，未免时有迷茫。</p>
+<p>本文是个人面对这种情形的一种尝试，供参考。</p>
+<h2 id="输入">输入</h2>
+<p>我平时获取信息的主要渠道有：</p>
+<ol>
+<li>微博</li>
+<li>Twitter</li>
+<li>Youtube</li>
+<li>V2ex</li>
+<li>Instagram</li>
+<li>微信公众号（过于封闭，已基本放弃）</li>
+<li>各种播客</li>
+<li>各种博主的个人博客（主要 IT 领域有几十个）</li>
+<li>国内外科技网站：如 少数派、Endgnet 等</li>
+<li>Telegram 各种群（垃圾信息挺多，偶尔看）</li>
+</ol>
+<h3 id="聚合方案">聚合方案</h3>
+<p>使用 Rsshub +Inoreader 将各种渠道的关键信息筛选后汇总。</p>
+<p>以上渠道除了博客和新闻网站，基本不提供原生 rss 订阅。</p>
+<p>所以得自己动手。</p>
+<h4 id="第一步-制作-rss-源">第一步 制作 RSS 源</h4>
+<ul>
+<li>RSSHub 是一个轻量、易于扩展的 RSS 生成器, 可以给各种奇奇怪怪的内容生成 RSS 订阅源。
+<ul>
+<li>github 地址：<a href="https://github.com/DIYgod/RSSHub">https://github.com/DIYgod/RSSHub</a></li>
+</ul>
+</li>
+<li>主要功能是将一些本来不提供 RSS 的信息源制作成 RSS 源。比如微博和 Instagram。</li>
+<li>已部署至个人服务器，欢迎使用： <a href="http://rsshub.mabutou.me/">https://rsshub.mabutou.me</a></li>
+<li>使用方法很简单参考官方文档：<a href="https://docs.rsshub.app/">https://docs.rsshub.app</a></li>
+</ul>
+<p>例：比如制作 木遥 微博的订阅源</p>
+<ol>
+<li>打开目标微博主页</li>
+<li>打开网页开发工具，控制台输入 $CONFIG.oid</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="https://butou.ma/wp-content/uploads/2019/04/1bb80-006tNc79gy1fz7o3iecajj31hc0u0doc.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<ol>
+<li>复制得到的用户 id 1400854834，拼接成对应 url ：<a href="http://rsshub.mabutou.me/weibo/user/1400854834">http://rsshub.mabutou.me/weibo/user/1400854834</a></li>
+<li>浏览器如能成功访问此网址，则对应的 RSS 源就生成成功了。</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://butou.ma/wp-content/uploads/2019/04/60a2c-006tNc79gy1fz7o46nbxqj31hc0u0ag9.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<h4 id="注有些渠道比较简单如-instagram-直接用-id-拼接成对应-rss-地址即可">注：有些渠道比较简单，如 instagram。直接用 id 拼接成对应 rss 地址即可。</h4>
+<p><em>以长泽雅美 ?masami_nagasawa 为例：https://rsshub.mabutou.me/instagram/user/masami_nagasawa</em></p>
+<h4 id="第二步-订阅和阅读-rss">第二步 订阅和阅读 RSS</h4>
+<ul>
+<li>rss 客户端有很多款，推荐 inoreader</li>
+<li>inoreader 是一款很优秀的 RSS 阅读客户端。
+<ul>
+<li>提供网页端和移动端。</li>
+</ul>
+</li>
+<li>即使免费用户也有很完善的体验。
+<ul>
+<li>缺点是免费版不支持过滤，可通过 rsshub 增加 url 过滤参数实现，参考使用文档。</li>
+</ul>
+</li>
+<li>地址： <a href="https://www.inoreader.com/">https://www.inoreader.com</a></li>
+<li>将第一步制作好的 RSS 地址添加进去就行。</li>
+<li>很多个人博客和媒体网站都原生提供 RSS ，不用自己制作。</li>
+</ul>
+<figure data-type="image" tabindex="4"><img src="https://butou.ma/wp-content/uploads/2019/04/85039-006tNc79gy1fz7ocdkas1j30sc0fmq3n.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<h4 id="最终效果">最终效果</h4>
+<figure data-type="image" tabindex="5"><img src="https://butou.ma/wp-content/uploads/2019/04/2174f-006tNc79gy1fz7odibpixj31hc0u0jwz.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<h4 id="备注-1">备注 1</h4>
+<ul>
+<li>可配合 chrome 插件 Easy-to-RSS 直接获取或生成当前页面的 RSS 地址。</li>
+<li>安装地址 <a href="https://chrome.google.com/webstore/detail/easy-to-rss/hbcmpkcpbnecinpngdnfbnknfkdpdfli">https://chrome.google.com/webstore/detail/easy-to-rss/hbcmpkcpbnecinpngdnfbnknfkdpdfli</a></li>
+<li>github：<a href="https://github.com/idealclover/Easy-to-RSS">https://github.com/idealclover/Easy-to-RSS</a></li>
+</ul>
+<ol>
+<li>如果该网站自带 RSS，Easy-to-RSS 将获取该网站自带 RSS</li>
+<li>如果该网站被 <a href="https://github.com/DIYgod/RSSHub">RSSHub</a> 收录，Easy-to-RSS 将获取该网站在 RSSHub 中的地址：</li>
+</ol>
+<ul>
+<li>安装好后最好在配置页面把服务器地址改成自己的。</li>
+</ul>
+<figure data-type="image" tabindex="6"><img src="https://butou.ma/wp-content/uploads/2019/04/c537f-006tNc79gy1fz7p0ogcwij30n208kwej.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://butou.ma/wp-content/uploads/2019/04/afe2d-006tNc79gy1fz7p3jhharj31hc0u0tey.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<h4 id="备注-2">备注 2</h4>
+<ul>
+<li>Inoreader 可与 <a href="http://reabble.com/">http://reabble.com/</a> 联动，实现在 kindle 上阅读的同时重新排版。</li>
+<li>reabble 本质上是通过登录 Inoreader 帐号，获取到里面的内容后进行二次排版，专门针对电子墨水屏设备优化。</li>
+<li>效果如图：<img src="https://butou.ma/wp-content/uploads/2019/04/6a559-006tNc79gy1fz7pphojawj30ts148gm9.jpg?is-pending-load=1" alt="" loading="lazy"></li>
+</ul>
+<h2 id="输出">输出</h2>
+<p>信息流里有些值得记录的信息，需要手动进行整理与归档。方便查阅或回顾。</p>
+<ul>
+<li>以前的办法：</li>
+</ul>
+<ol>
+<li>加浏览器书签（缺点明显，保存的只是链接，有失效风险）。</li>
+<li>用笔记软件记录。</li>
+</ol>
+<ul>
+<li>
+<p>尝试过各类笔记应用，都不太满意。</p>
+</li>
+<li>
+<p>印象笔记</p>
+</li>
+<li>
+<p>优点：用户量大，可以跟很多第三方应用联动。</p>
+</li>
+<li>
+<p>缺点：软件臃肿，免费用户流量限制，设备数限制。</p>
+</li>
+<li>
+<p>onenote</p>
+</li>
+<li>
+<p>优点：编辑功能强大，排版自由度高。</p>
+</li>
+<li>
+<p>缺点：同步很不稳定。</p>
+</li>
+<li>
+<p>notion</p>
+</li>
+<li>
+<p>界面美观。编辑功能比较有特色。</p>
+</li>
+<li>
+<p>导入与迁移不方便。</p>
+</li>
+<li>
+<p>还用过一些，反正都不喜欢。核心缺点都是不能方便的备份数据为通用格式。</p>
+</li>
+<li>
+<p>后来转向开源的个人wiki系统。主流的那几个全都试了下，不是太简陋就是太复杂，易用性很一般。</p>
+</li>
+</ul>
+<p><strong>最终用的是 Trilium <a href="https://github.com/zadam/trilium">https://github.com/zadam/trilium</a></strong></p>
+<p>一款开源知识库软件。</p>
+<ul>
+<li>
+<p>界面简洁</p>
+</li>
+<li>
+<p>支持导入导出各种格式笔记。html markdown等</p>
+</li>
+<li>
+<p>支持印象笔记导入</p>
+</li>
+<li>
+<p>无限笔记层级</p>
+</li>
+<li>
+<p>有客户端</p>
+</li>
+<li>
+<p>支持部署到本地电脑或个人服务器，然后通过浏览器访问</p>
+</li>
+<li>
+<p>本地数据可与服务器保持同步。</p>
+</li>
+<li>
+<p>有帐号系统（但较弱）</p>
+</li>
+<li>
+<p>编辑模式支持各种代码格式</p>
+</li>
+<li>
+<p>支持自定义主题</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="8"><img src="https://butou.ma/wp-content/uploads/2019/04/2d89b-006tKfTcgy1g07akkwhs2j31hc0u00xv.jpg?is-pending-load=1" alt="" loading="lazy"></figure>
+<h2 id="检索">检索</h2>
+<p>应对”知识爆炸”，大脑只需记住核心的知识点，舍弃边缘的知识点。</p>
+<p>碎片化信息流获取的信息大多是边缘知识，不需要刻意记忆，在需要的时候临时通过搜索引擎或者个人 wiki 检索就行（trlium 有全文搜索功能）。</p>
+<p>通过以上步骤的循环积累，个人知识库会逐渐成体系，能大幅增强检索边缘化知识的效率。</p>
+<p><strong>在这个变幻的世界，为避免思维僵化，我们需要走出舒适区不断引入新的知识维度，理解很多看似矛盾对立的现实，最终穿越生活的迷雾构建属于自己的多维度思维模型。</strong></p>
+<p><strong>道阻且长, 行则将至。各位共勉。</strong></p>
+<p>(Visited 1,508 times, 3 visits today)</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://blog.butou.ma/post/hello-gridea/</id>
+        <link href="https://blog.butou.ma/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="http://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>
